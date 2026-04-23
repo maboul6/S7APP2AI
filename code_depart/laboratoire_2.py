@@ -27,9 +27,9 @@ def main():
     nn_classifier = classifier.NeuralNetworkClassifier(input_dim=representation.data.shape[1],
                                                        output_dim=len(representation.unique_labels),
                                                        n_hidden=1,
-                                                       n_neurons=2,
-                                                       lr=0.01,
-                                                       n_epochs=10,
+                                                       n_neurons=8,
+                                                       lr=0.001,
+                                                       n_epochs=500,
                                                        batch_size=16)
     # -------------------------------------------------------------------------
     nn_classifier.fit(representation)

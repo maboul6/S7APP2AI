@@ -25,7 +25,7 @@ def project_onto_new_basis(data: numpy.ndarray, basis: numpy.ndarray) -> numpy.n
 
     # L1.E2.5 Complétez cette fonction pour projeter les données sur une nouvelle base
     # -------------------------------------------------------------------------
-    return numpy.zeros((data.shape[0], basis.shape[-1]))  # Remplacez cette ligne par le code de projection réel
+    return numpy.dot(data, basis)  # Remplacez cette ligne par le code de projection réel
     # -------------------------------------------------------------------------
 
 
@@ -261,7 +261,7 @@ class HistogramPDF(ProbabilityDensityFunction):
         # L3.S2.1 Construire un modèle empirique de densité de probabilité pour chacune des classes
         # (Utilisez numpy.histogramdd, retirez les tenseur nulles et les 1 suspect)
         # ---------------------------------------------------------------------
-        self.histogram, self.bin_edges = numpy.histogramdd(numpy.zeros_like(data), bins=1, density=True)
+        self.histogram, self.bin_edges = numpy.histogramdd(data, bins=self.n_bins, density=True)
         # ---------------------------------------------------------------------
 
     def compute_probability(self, data: numpy.ndarray) -> numpy.ndarray:
@@ -273,5 +273,12 @@ class HistogramPDF(ProbabilityDensityFunction):
         """
         # L3.S2.2 Compléter la méthode pour calculer la probabilité d'appartenir à cette classe
         # ---------------------------------------------------------------------
-        return numpy.zeros(data.shape[0])
+        bin_indices = []
+        for d in range(self.dim):
+            indices = numpy.digitize(data[:,d], self.bin_edges[d]) -1
+            indices = numpy.clip(indices, 0, self.n_bins-1)
+            bin_indices.append(indices)
+        probabilities = self.histogram[tuple(bin_indices)]
+        
+        return probabilities
         # ---------------------------------------------------------------------

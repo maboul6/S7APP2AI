@@ -46,6 +46,9 @@ def exercice_2_decorrelation():
 
     # L1.E2.5 Projetez la représentation des données sur la première composante principale
     # -------------------------------------------------------------------------
+    idx = numpy.argsort(eigenvalues)[::-1] #ordre inverse
+    eigenvalues = eigenvalues[idx]
+    eigenvectors = eigenvectors[idx]
     first_principal_component = eigenvectors[:,0].reshape(-1, 1)                                    # Sélectionnez la première composante principale
     decorrelated_samples = analysis.project_onto_new_basis(samples, first_principal_component)  # Complétez la fonction project_onto_new_basis dans analysis.py
 
@@ -232,9 +235,9 @@ def exercice_4_choix_representation():
 def main():
     # pylint: disable = using-constant-test, multiple-statements
     
-    if False: exercice_2_decorrelation()
+    if True: exercice_2_decorrelation()
     if False: exercice_3_visualisation_representation()
-    if True: exercice_4_choix_representation()
+    if False: exercice_4_choix_representation()
 
 
 if __name__ == "__main__":

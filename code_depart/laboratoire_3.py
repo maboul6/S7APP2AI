@@ -37,7 +37,7 @@ def exercice_1_modele_gaussiens():
 
     # L3.E1.3 Superposer sur le graphique des classes les frontières calculées dans l'exercice préparatoire.
     # -------------------------------------------------------------------------
-    viz.plot_data_distribution(representation, show_ellipses=False, analytical_boundaries=False)
+    viz.plot_data_distribution(representation, show_ellipses=True, analytical_boundaries=True)
     # -------------------------------------------------------------------------
     # =========================================================================
 
@@ -67,7 +67,7 @@ def exercice_2_classificateur_ppv():
     # L3.E2.3 et L3.E2.4 Générer un seul représentant pour chaque classe au moyen de l'algorithme des k-moyennes
     # (Complétez la classe helpers.classifier.KNNClassifier)
     # -------------------------------------------------------------------------
-    knn_classifier = classifier.KNNClassifier(n_neighbors=1, use_kmeans=True, n_representatives=1)
+    knn_classifier = classifier.KNNClassifier(n_neighbors=1, use_kmeans=True, n_representatives=7)
     knn_classifier.fit(representation)
     predictions = knn_classifier.predict(representation.data)
 
@@ -167,9 +167,9 @@ def exercice_s2_pdf_arbitraire():
 def main():
     # pylint: disable = using-constant-test, multiple-statements
 
-    if True: exercice_1_modele_gaussiens()
-    if True: exercice_2_classificateur_ppv()
-    if True: exercice_3_classificateur_bayesien()
+    if False: exercice_1_modele_gaussiens()
+    if False: exercice_2_classificateur_ppv()
+    if False: exercice_3_classificateur_bayesien()
     if True: exercice_s1_classificateur_bayesien_complet()
     if True: exercice_s2_pdf_arbitraire()
 
