@@ -108,14 +108,19 @@ def main():
     # de leurs valeurs propres (importance). Elle projete ensuite les données dans cet espace.
     # Ici, nous demandons une projection dans l'espace des 3 composantes avec la plus grande variance.
     # TODO: Dans la problématique on demande d'utiliser les techniques vue au laboratoire 1
-    pca_3_components = sklearn.decomposition.PCA(n_components=3)
-    pca_3_components.fit(data)
+    mean, covariance, eigenvalues, eigenvectors = analysis.compute_gaussian_model(data)
+    idx = numpy.argsort(eigenvalues)[::-1]
+    eigenvalues = eigenvalues[idx]
+    eigenvectors = eigenvectors[:, idx]
+    basis_3_components = eigenvectors[:,:3]
+    data_projected = analysis.project_onto_new_basis(data, basis_3_components)
+    # pca_3_components = sklearn.decomposition.PCA(n_components=3)
+    # pca_3_components.fit(data)
 
     # Projection des données dans l'espace PCA à 3 composantes
-    data_projected = pca_3_components.transform(data)
-    C1_projected = pca_3_components.transform(C1)
-    C2_projected = pca_3_components.transform(C2)
-    C3_projected = pca_3_components.transform(C3)
+    C1_projected = analysis.project_onto_new_basis(C1, basis_3_components)
+    C2_projected = analysis.project_onto_new_basis(C2, basis_3_components)
+    C3_projected = analysis.project_onto_new_basis(C3, basis_3_components)
 
     print("\n----- Classe 1 projetée -----")
     mean1_p, cov1_p, eigvals1_p, eigvecs1_p = analysis.compute_gaussian_model(C1_projected)
@@ -144,10 +149,12 @@ def main():
 
     # L2.E3.3 Créez un ensemble d'entraînement et de validation à partir des données préparées.
     # -------------------------------------------------------------------------
-    train_data = scaled_data
-    val_data = []
-    train_labels = labels_one_hot
-    val_labels = []
+    train_data, val_data, train_labels, val_labels = sklearn.model_selection.train_test_split(
+        data,
+        labels_one_hot,
+        test_size=0.3,
+        stratify=labels
+    )
     # -------------------------------------------------------------------------
 
     # L2.E3.4 Testez plusieurs configurations de réseaux de neurones et de fonction d'activation.
@@ -176,9 +183,10 @@ def main():
     # -------------------------------------------------------------------------
     history: keras.callbacks.History = model.fit(
         train_data, train_labels,
+        validation_data=(val_data, val_labels),
         batch_size=16,
         shuffle=True,
-        epochs=10,
+        epochs=500,
         callbacks=callbacks,
         verbose=True
     )
