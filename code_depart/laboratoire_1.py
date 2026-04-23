@@ -107,7 +107,7 @@ def exercice_3_visualisation_representation():
     # L1.E3.4 Calculer les variances sur chaque dimension pour la classe C1 ainsi que leur corrélations
     # -------------------------------------------------------------------------
     data_C1 = reprensentation.get_class("C1")
-    variances = numpy.var(data_C1)                         # Utilisez la fonction appropriée pour calculer les variances
+    variances = numpy.var(data_C1, axis=0)                         # Utilisez la fonction appropriée pour calculer les variances
     correlations = numpy.corrcoef(data_C1, rowvar=False)    # Utilisez la fonction appropriée pour calculer les corrélations
     print("Exercice 3.4: Variances et corrélations pour la classe C1")
     print(f"Variances : {variances}")
@@ -120,7 +120,7 @@ def exercice_3_visualisation_representation():
 
     # Utilisez la fonction appropriée pour projeter les données sur la nouvelle base
     # Indice: Utilisez la fonction project_onto_new_basis définie précédement pour créer une nouvelle représentation des données
-    decorrelated_data = analysis.project_onto_new_basis(data_C1, eigenvectors_C1)
+    decorrelated_data = analysis.project_onto_new_basis(data3classes.data, eigenvectors_C1)
     decorrelated_representation = dataset.Representation(data=decorrelated_data, labels=data3classes.labels)
 
     print("\nExercice 3.6: Données décorrelées de la classe C1")
@@ -179,7 +179,7 @@ def exercice_4_choix_representation():
     # =========================================================================
     features = numpy.zeros((len(images), 6)) # 3 moyennes + 3 écarts-types
     for i, (image, _) in enumerate(images):
-        channels_mean = numpy.zeros(3)  # Calculer la moyenne de chaque canal R, G et B
+        channels_mean = numpy.mean(image, axis=(0,1))  # Calculer la moyenne de chaque canal R, G et B
 
         # L1.E4.7 Répéter pour une autre métrique de votre choix
         # ---------------------------------------------------------------------
@@ -238,8 +238,8 @@ def main():
     # pylint: disable = using-constant-test, multiple-statements
 
     if False: exercice_2_decorrelation()
-    if True: exercice_3_visualisation_representation()
-    if False: exercice_4_choix_representation()
+    if False: exercice_3_visualisation_representation()
+    if True: exercice_4_choix_representation()
 
 
 if __name__ == "__main__":
