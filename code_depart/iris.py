@@ -144,13 +144,14 @@ def main():
     # (e.g., normalisation, centrage, filtrage, réduction de dimensionnalité, etc.)
     # -------------------------------------------------------------------------
     # normalized in the range [-1, 1]
+    # relevant_data = data_projected[:,:3]
     scaled_data = analysis.rescale_data(data_projected)
     # -------------------------------------------------------------------------
 
     # L2.E3.3 Créez un ensemble d'entraînement et de validation à partir des données préparées.
     # -------------------------------------------------------------------------
     train_data, val_data, train_labels, val_labels = sklearn.model_selection.train_test_split(
-        data,
+        scaled_data,
         labels_one_hot,
         test_size=0.3,
         stratify=labels
@@ -161,16 +162,16 @@ def main():
     # -------------------------------------------------------------------------
     model = keras.models.Sequential()
     model.add(keras.layers.InputLayer(input_shape=(scaled_data.shape[-1],)))
-    model.add(keras.layers.Dense(units=3, activation="linear"))
-    model.add(keras.layers.Dense(units=labels_one_hot.shape[-1], activation="linear"))
+    model.add(keras.layers.Dense(units=8, activation="tanh"))
+    model.add(keras.layers.Dense(units=labels_one_hot.shape[-1], activation="softmax"))
     print(model.summary())
     # -------------------------------------------------------------------------
 
     # L2.E3.4 Testez plusieurs configurations d'optimisateur, de taux d'apprentissage et de fonction de coût.
     # -------------------------------------------------------------------------
     model.compile(
-        optimizer=keras.optimizers.SGD(learning_rate=0.001, momentum=0.01),
-        loss=keras.losses.MeanSquaredError(),
+        optimizer=keras.optimizers.SGD(learning_rate=0.006, momentum=0.01),
+        loss=keras.losses.CategoricalCrossentropy(),
         metrics=["accuracy"]
     )
     # -------------------------------------------------------------------------

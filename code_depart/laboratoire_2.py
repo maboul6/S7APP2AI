@@ -29,7 +29,7 @@ def main():
                                                        n_hidden=1,
                                                        n_neurons=2,
                                                        lr=0.01,
-                                                       n_epochs=10,
+                                                       n_epochs=250,
                                                        batch_size=16)
     # -------------------------------------------------------------------------
     nn_classifier.fit(representation)
